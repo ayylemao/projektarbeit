@@ -80,8 +80,13 @@ end program
       dimension alat(3, 3),alatalat(3,3),eigalat(3)
       dimension alpha(natx_sphere), cs(10),cp(10)
       integer, dimension(nat) :: symb_table
+      integer, dimension(natx_sphere) :: CN_symbs
       real*8,allocatable ::  ovrlp(:,:),ovrla(:,:),eval(:)
-
+      real*8 rcov_C, rcov_N
+      convert=1.d0/0.52917720859d0
+      
+      rcov_C = 0.77d0*convert
+      rcov_N = 0.75d0*convert
 
 ! parameters for cutoff function: width_cutoff is the width of the Gauusian
 ! approximated by a polynomial with exponent nex_cutoff
@@ -113,7 +118,7 @@ end program
     do lat=1,nat
 !---------------------------------------------------------------------
       if (symb_table(lat).eq.0) then
-        width_cutoff = 4.0d0
+        width_cutoff = 3.5d0
       else
         width_cutoff = 4.d0
       endif
@@ -132,10 +137,16 @@ end program
        allocate(ovrlp(norb,norb),ovrla(norb,norb),eval(norb))
 
         do iat=1,nat_sphere
-           alpha(iat)=.5d0/(1.0d0*rcov_sphere(iat))**2
+          alpha(iat)=.5d0/(1.0d0*rcov_sphere(iat))**2
+          !calculate r_cov sphere -> symb
+          if (rcov_C.eq.rcov_sphere(iat)) then
+            CN_symbs(iat) = 0
+          else
+            CN_symbs(iat) = 1
+          endif
         enddo
 
-        call crtovrlp(nat_sphere,rxyz_sphere,alpha,cs,cp,ns,np,ovrlp)
+        call crtovrlp(nat_sphere,rxyz_sphere,alpha,cs,cp,ns,np,ovrlp, CN_symbs)
         call multamp(nat_sphere,ovrlp,amplitude,norb,ns,np,ovrla)
          trace=0.d0
          do i=1,norb

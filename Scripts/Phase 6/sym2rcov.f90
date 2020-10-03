@@ -185,5 +185,5 @@ subroutine sym2rcov(sym,rcov)
 
 !  write(*,*) rcov
 
-endsubroutine sym2rcov
+end subroutine sym2rcov
 

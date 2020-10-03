@@ -47,12 +47,19 @@ subroutine atoms_sphere(width_cutoff,nex_cutoff,lat,llat,ixyzmax,nat,natx_sphere
 end subroutine atoms_sphere
 
 
-subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp)
+subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp, CN_symbs)
   implicit real*8 (a-h,o-z)
   real*8  rxyz(3,nat)
   real*8 ovrlp(nat*(ns+3*np),nat*(ns+3*np))
   real*8  alpha(nat), cs(10),cp(10)
-
+  real*8 C_s, C_p, N_s, N_p
+  integer, dimension(natx_sphere) :: CN_symbs
+  integer :: natx_sphere
+  natx_sphere = 100
+  C_s = 0.500866
+  C_p = 0.199186
+  N_s = 0.676151
+  N_p = 0.266297
 
   if(ns>10 .or. np > 10) stop 'ns > 10   .or.  np > 10  !'
 
@@ -63,14 +70,25 @@ subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp)
   do jat=1,nat
     do js=1,ns
       jorb=(jat-1)*(ns+3*np)+js
-      aj=alpha(jat)/cs(js)
+      if (CN_symbs(jat).eq.0) then
+            eps = C_s
+          else
+            eps = N_s
+      endif
+      aj=alpha(jat)/(cs(js)*eps)
       xj=rxyz(1,jat) ; yj=rxyz(2,jat); zj=rxyz(3,jat)
 
       do iat=1,nat
         do is=1,ns
           !!iorb=iat+(is-1)*nat
           iorb=(iat-1)*(ns+3*np)+is
-          ai= alpha(iat)/cs(is) 
+          if (CN_symbs(iat).eq.0) then
+            eps = C_s
+          else
+            eps = N_s
+          endif
+            ai= alpha(iat)/(cs(is)*eps)
+
           xi=rxyz(1,iat) ; yi=rxyz(2,iat); zi=rxyz(3,iat)
 
           xij=xi-xj; yij=yi-yj; zij=zi-zj
@@ -91,16 +109,25 @@ subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp)
   !  <pi|sj>
   do jat=1,nat
     do js=1,ns
-      
+      if (CN_symbs(jat).eq.0) then
+            eps = C_s
+          else
+            eps = N_s
+      endif
       jorb=(jat-1)*(ns+3*np)+js
-      aj=alpha(jat)/cs(js)
+      aj=alpha(jat)/(cs(js)*eps)
       xj=rxyz(1,jat) ; yj=rxyz(2,jat); zj=rxyz(3,jat)
 
       do iat=1,nat
         do ip=1,np
+          if (CN_symbs(iat).eq.0) then
+            eps = C_p
+          else
+            eps = N_p
+          endif
           !!iorb=1+(iat-1)*3+ns*nat + (ip-1)*3*nat
           iorb=(iat-1)*(ns+3*np)+ns+ip
-          ai= alpha(iat)/cp(ip) 
+          ai= alpha(iat)/(cp(ip)*eps)
           xi=rxyz(1,iat) ; yi=rxyz(2,iat); zi=rxyz(3,iat)
 
           xij=xi-xj; yij=yi-yj; zij=zi-zj
@@ -125,16 +152,25 @@ subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp)
   !  <si|pj> 
   do jat=1,nat
     do jp=1,np
-        
+      if (CN_symbs(jat).eq.0) then
+          eps = C_p
+        else
+          eps = N_p
+      endif
       jorb=(jat-1)*(ns+3*np)+ns+jp
-      aj=alpha(jat)/cp(jp)
+      aj=alpha(jat)/(cp(jp)*eps)
       xj=rxyz(1,jat) ; yj=rxyz(2,jat); zj=rxyz(3,jat)
 
       do iat=1,nat
         do is=1,ns
+          if (CN_symbs(iat).eq.0) then
+              eps = C_s
+            else
+              eps = N_s
+          endif
           !!iorb=iat+(is-1)*nat
           iorb=(iat-1)*(ns+3*np)+is
-          ai= alpha(iat)/cs(is) 
+          ai= alpha(iat)/(cs(is)*eps)
           xi=rxyz(1,iat) ; yi=rxyz(2,iat); zi=rxyz(3,iat)
 
           xij=xi-xj; yij=yi-yj; zij=zi-zj
@@ -159,15 +195,24 @@ subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp)
   !  <p|p>
   do jat=1,nat
     do jp=1,np
-      
+      if (CN_symbs(jat).eq.0) then
+          eps = C_p
+        else
+          eps = N_p
+      endif
       jorb=(jat-1)*(ns+3*np)+ns+jp
-      aj=alpha(jat)/cp(jp)
+      aj=alpha(jat)/(cp(jp)*eps)
       xj=rxyz(1,jat) ; yj=rxyz(2,jat); zj=rxyz(3,jat)
 
       do iat=1,nat
         do ip=1,np
+          if (CN_symbs(iat).eq.0) then
+            eps = C_p
+          else
+            eps = N_p
+          endif
           iorb=(iat-1)*(ns+3*np)+ns+ip
-          ai= alpha(iat)/cp(ip) 
+          ai= alpha(iat)/(cp(ip)*eps)
           xi=rxyz(1,iat) ; yi=rxyz(2,iat); zi=rxyz(3,iat)
 
           xij=xi-xj; yij=yi-yj; zij=zi-zj
