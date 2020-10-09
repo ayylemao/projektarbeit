@@ -118,7 +118,7 @@ end program
     do lat=1,nat
 !---------------------------------------------------------------------
       if (symb_table(lat).eq.0) then
-        width_cutoff = 3.5d0
+        width_cutoff = 4.d0
       else
         width_cutoff = 4.d0
       endif
