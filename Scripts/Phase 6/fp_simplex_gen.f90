@@ -120,7 +120,7 @@ end program
       if (symb_table(lat).eq.0) then
         width_cutoff = 4.d0
       else
-      width_cutoff = 4.0d0
+        width_cutoff = 4.0d0
       endif
 !---------------------------------------------------------------------
       nex_cutoff=2
