@@ -9,6 +9,10 @@ program simplex_comparison
 	afalse = 0
 	avg_dist_false = 0.0
 	avg_dist_right = 0.0
+
+	open(29, file="wrong_dist.dat")
+	open(30, file="right_dist.dat")
+
 	call readVector(fp_vec, nconfig)
 	
 	do i = 1, 101
@@ -43,12 +47,14 @@ program simplex_comparison
 		if (symb_truth == symb_test) then
 			acorrect = acorrect + 1.0
 			avg_dist_right = avg_dist_right + bmin
+			write(30, *) bmin
 			!write(*,*) "Correct Guess: ", symb_test
 			!DEBUG
 			!---------------------------------------
 			else
 			afalse = afalse + 1.0
 			avg_dist_false = avg_dist_false + bmin
+			write(29, *) bmin
 			!---------------------------------------
 		end if
 	enddo
