@@ -60,6 +60,7 @@ subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp, CN_symbs)
   C_p = 0.199186
   N_s = 0.676151
   N_p = 0.266297
+  const = 0.19d0
 
   if(ns>10 .or. np > 10) stop 'ns > 10   .or.  np > 10  !'
 
@@ -75,7 +76,7 @@ subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp, CN_symbs)
           else
             eps = N_s
       endif
-      aj=alpha(jat)/(cs(js)*eps)
+      aj=const*alpha(jat)/(cs(js)*eps)
       xj=rxyz(1,jat) ; yj=rxyz(2,jat); zj=rxyz(3,jat)
 
       do iat=1,nat
@@ -87,7 +88,7 @@ subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp, CN_symbs)
           else
             eps = N_s
           endif
-            ai= alpha(iat)/(cs(is)*eps)
+            ai= const*alpha(iat)/(cs(is)*eps)
 
           xi=rxyz(1,iat) ; yi=rxyz(2,iat); zi=rxyz(3,iat)
 
@@ -115,7 +116,7 @@ subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp, CN_symbs)
             eps = N_s
       endif
       jorb=(jat-1)*(ns+3*np)+js
-      aj=alpha(jat)/(cs(js)*eps)
+      aj=const*alpha(jat)/(cs(js)*eps)
       xj=rxyz(1,jat) ; yj=rxyz(2,jat); zj=rxyz(3,jat)
 
       do iat=1,nat
@@ -127,7 +128,7 @@ subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp, CN_symbs)
           endif
           !!iorb=1+(iat-1)*3+ns*nat + (ip-1)*3*nat
           iorb=(iat-1)*(ns+3*np)+ns+ip
-          ai= alpha(iat)/(cp(ip)*eps)
+          ai= const*alpha(iat)/(cp(ip)*eps)
           xi=rxyz(1,iat) ; yi=rxyz(2,iat); zi=rxyz(3,iat)
 
           xij=xi-xj; yij=yi-yj; zij=zi-zj
@@ -158,7 +159,7 @@ subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp, CN_symbs)
           eps = N_p
       endif
       jorb=(jat-1)*(ns+3*np)+ns+jp
-      aj=alpha(jat)/(cp(jp)*eps)
+      aj=const*alpha(jat)/(cp(jp)*eps)
       xj=rxyz(1,jat) ; yj=rxyz(2,jat); zj=rxyz(3,jat)
 
       do iat=1,nat
@@ -170,7 +171,7 @@ subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp, CN_symbs)
           endif
           !!iorb=iat+(is-1)*nat
           iorb=(iat-1)*(ns+3*np)+is
-          ai= alpha(iat)/(cs(is)*eps)
+          ai= const*alpha(iat)/(cs(is)*eps)
           xi=rxyz(1,iat) ; yi=rxyz(2,iat); zi=rxyz(3,iat)
 
           xij=xi-xj; yij=yi-yj; zij=zi-zj
@@ -201,7 +202,7 @@ subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp, CN_symbs)
           eps = N_p
       endif
       jorb=(jat-1)*(ns+3*np)+ns+jp
-      aj=alpha(jat)/(cp(jp)*eps)
+      aj=const*alpha(jat)/(cp(jp)*eps)
       xj=rxyz(1,jat) ; yj=rxyz(2,jat); zj=rxyz(3,jat)
 
       do iat=1,nat
@@ -212,7 +213,7 @@ subroutine crtovrlp(nat,rxyz,alpha,cs,cp,ns,np,ovrlp, CN_symbs)
             eps = N_p
           endif
           iorb=(iat-1)*(ns+3*np)+ns+ip
-          ai= alpha(iat)/(cp(ip)*eps)
+          ai= const*alpha(iat)/(cp(ip)*eps)
           xi=rxyz(1,iat) ; yi=rxyz(2,iat); zi=rxyz(3,iat)
 
           xij=xi-xj; yij=yi-yj; zij=zi-zj
