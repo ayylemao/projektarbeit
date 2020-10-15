@@ -1,17 +1,17 @@
 program simplex_comparison
 	implicit real*8 (a-h, o-z)
 	integer iconf, iat, ientry, icorrect, nconfig
-	dimension ref_vec(400), fp_vec(4000, 400), results(400), ref_matrix(101, 400)
+	dimension ref_vec(400), fp_vec(8000, 400), results(400), ref_matrix(101, 400)
 	integer, dimension(101, 3) :: iconfigs
 	character(1) symb_test, symb_truth
 	acorrect = 0.0
-	nconfig = 4000
+	nconfig = 8000
 	afalse = 0
 	avg_dist_false = 0.0
 	avg_dist_right = 0.0
+	!maxnumber of env: 79184
+	!maxnumber of configs:  4949
 
-	open(29, file="wrong_dist.dat")
-	open(30, file="right_dist.dat")
 
 	call readVector(fp_vec, nconfig)
 	
@@ -47,14 +47,12 @@ program simplex_comparison
 		if (symb_truth == symb_test) then
 			acorrect = acorrect + 1.0
 			avg_dist_right = avg_dist_right + bmin
-			write(30, *) bmin
 			!write(*,*) "Correct Guess: ", symb_test
 			!DEBUG
 			!---------------------------------------
 			else
 			afalse = afalse + 1.0
 			avg_dist_false = avg_dist_false + bmin
-			write(29, *) bmin
 			!---------------------------------------
 		end if
 	enddo

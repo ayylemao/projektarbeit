@@ -1,16 +1,16 @@
 program Fingerprint
   ! Main program to test silicon potential subroutines
   implicit real*8 (a-h,o-z)
-  parameter(nat=16,natx_sphere=100,ns=1,np=1,nconf=4000)
+  parameter(nat=16,natx_sphere=100,ns=1,np=1,nconf=500)
   dimension rxyz(3,nat),rcov(nat),alat(3,3)
   dimension fpall((ns+3*np)*natx_sphere,nat,nconf)
   character(len=2), dimension(nat,nconf) :: symb
   character(len=100) :: filetype
-  integer, dimension(nat) :: symb_table
   integer :: progress
-  symb_table = (/0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1/)
   progress = nconf/40
 
+  !maxnumber of env: 79184
+  !maxnumber of configs:  4949
 
   !filetype='ascii'
   filetype='ascii'
@@ -41,7 +41,7 @@ do iconf=1,nconf
 	endif
 
 
-	call fingerprint_eval(nat, natx_sphere, ns,np, alat, rxyz, rcov, fpall(1,1,iconf), symb_table)
+	call fingerprint_eval(nat, natx_sphere, ns,np, alat, rxyz, rcov, fpall(1,1,iconf))
 enddo
 close(10)
 
@@ -70,7 +70,7 @@ end program
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!   S U B R O U T I N E S   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine fingerprint_eval(nat, natx_sphere, ns,np, alat, rxyz, rcov, fp, symb_table)
+  subroutine fingerprint_eval(nat, natx_sphere, ns,np, alat, rxyz, rcov, fp)
       implicit real*8 (a-h,o-z)
       parameter(nwork=100)
       dimension workalat(nwork)
@@ -79,7 +79,6 @@ end program
       dimension rxyz(3,nat),rcov(nat)!,eval((ns+3*np)*natx_sphere)
       dimension alat(3, 3),alatalat(3,3),eigalat(3)
       dimension alpha(natx_sphere), cs(10),cp(10)
-      integer, dimension(nat) :: symb_table
       integer, dimension(natx_sphere) :: CN_symbs
       real*8,allocatable ::  ovrlp(:,:),ovrla(:,:),eval(:)
       real*8 rcov_C, rcov_N
@@ -90,7 +89,9 @@ end program
 
 ! parameters for cutoff function: width_cutoff is the width of the Gauusian
 ! approximated by a polynomial with exponent nex_cutoff
-      
+      width_cutoff = 4.d0
+      nex_cutoff=2
+      radius_cutoff=sqrt(2.d0*nex_cutoff)*width_cutoff
 
     if (alat(1,1)*alat(2,2)*alat(3,3).eq.0.d0 ) then 
         ixyzmax=0
@@ -116,16 +117,7 @@ end program
       natsmax=0
       natsmin=1000000
     do lat=1,nat
-!---------------------------------------------------------------------
-      if (symb_table(lat).eq.0) then
-        width_cutoff = 4.d0
-      else
-        width_cutoff = 4.d0
-      endif
-!---------------------------------------------------------------------
-      nex_cutoff=2
-      radius_cutoff=sqrt(2.d0*nex_cutoff)*width_cutoff  ! radius where the polynomial is zero
-      
+     
 
        call atoms_sphere(width_cutoff,nex_cutoff,lat,llat,ixyzmax,nat,natx_sphere,nat_sphere,alat,rxyz,rxyz_sphere, & 
                         rcov,rcov_sphere,indat,amplitude,deramplitude)
