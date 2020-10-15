@@ -1,0 +1,10 @@
+Data/
+*.pdf
+*.ascii
+*.out
+*.txt
+*.dat
+Vogler(2)/
+classification
+reduced_fingerprint
+configs
