@@ -16,6 +16,7 @@ y9 = data[:, 9]
 y10 = data[:, 10]
 y11 = data[:, 11]
 
+
 plt.xlabel("scaling constant of the GTOs")
 plt.ylabel("vector entry magnitude")
 plt.plot(x, y1, label="1")
@@ -31,7 +32,7 @@ plt.plot(x, y10, label="25")
 plt.plot(x, y11, label="30")
 plt.vlines(0.19, -0.1, 5, linestyles='dashed', color='red', label=r"const=0.19")
 plt.legend(loc="upper right")
-plt.title("FP vector entries vs. scaling constant of the GTOs")
-plt.xlim(0, 2.5)
-plt.ylim(-0.1, 5)
+plt.title("Eigenvalues of the overlap matrix (without amplitude scaling) vs. scaling constant of the GTOs")
+#plt.xlim(0, 2.5)
+#plt.ylim(-0.1, 5)
 plt.savefig("plot3.png")

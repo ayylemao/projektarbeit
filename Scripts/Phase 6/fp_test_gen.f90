@@ -83,10 +83,8 @@ end program
       real*8,allocatable ::  ovrlp(:,:),ovrla(:,:),eval(:)
       real*8 rcov_C, rcov_N
       convert=1.d0/0.52917720859d0
-      
-      rcov_C = 0.77d0*convert
-      rcov_N = 0.75d0*convert
-
+      call sym2rcov("C ", rcov_C)
+      call sym2rcov("N ", rcov_N)
 ! parameters for cutoff function: width_cutoff is the width of the Gauusian
 ! approximated by a polynomial with exponent nex_cutoff
       width_cutoff = 4.d0
